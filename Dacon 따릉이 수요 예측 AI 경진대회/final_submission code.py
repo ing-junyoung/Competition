@@ -3,8 +3,6 @@
 
 # # Module import
 
-# In[1]:
-
 
 import pandas as pd 
 import numpy as np 
@@ -28,8 +26,6 @@ import catboost
 from catboost import CatBoostRegressor
 
 
-# In[2]:
-
 
 # 운영체제 및 python 버전
 print(platform.platform()) 
@@ -39,7 +35,6 @@ print(sys.version)
 # !pip freeze > requirements.txt
 
 
-# In[5]:
 
 
 # 데이터셋 및 외부 데이터셋 불러오기
@@ -57,7 +52,6 @@ test_pi = pd.read_csv('./dataset/test_pi.csv')
 test_hr = pd.read_csv('./dataset/test_hr.csv')
 
 
-# In[6]:
 
 
 # 데이터셋과 외부 데이터셋을 병합 
@@ -73,7 +67,6 @@ testset = pd.merge(testset, test_pi, on='date')
 testset = pd.merge(testset, test_hr, on='date', how='left')
 
 
-# In[7]:
 
 
 # 결측값 처리
@@ -90,8 +83,6 @@ testset['hr'] = testset["hr"].replace(np.nan, 0)
 testset['sunshine_sum'] = testset['sunshine_sum'].fillna(testset['sunshine_sum'].median())
 testset["pi"] = testset["pi"].fillna(testset["pi"].median())
 
-
-# In[8]:
 
 
 # 주말 변수 및 불쾌 지수 생성 함수
@@ -110,8 +101,6 @@ def get_discomfort(humid, min_t, max_t):
     return discomfort
 
 
-# In[9]:
-
 
 # 시간 변수를 추가하기 위한 처리
 
@@ -119,7 +108,6 @@ trainset.date = pd.to_datetime(trainset.date)
 testset.date = pd.to_datetime(testset.date)
 
 
-# In[10]:
 
 
 # 파생변수 생성
@@ -151,14 +139,12 @@ for i in range(len(testset)):
                                            testset.temp_highest[i])
 
 
-# In[11]:
 
 
 trainset['rain'] = trainset['precipitation'] * trainset['hr']
 testset['rain'] = testset['precipitation'] * testset['hr']
 
 
-# In[12]:
 
 
 # 후진제거법과 비슷한 맥락으로 Feature Drop & Selection   
@@ -179,14 +165,11 @@ trainset.drop(['wind_max'], axis=1, inplace=True)
 testset.drop(['wind_max'], axis=1, inplace=True)
 
 
-# In[13]:
-
 
 # 연도별 상승률 확인
 trainset['rental'].groupby(trainset.Year).agg('mean')
 
 
-# In[14]:
 
 
 # Objective metric 
@@ -196,7 +179,6 @@ def NMAE(true, pred):
     return score
 
 
-# In[15]:
 
 
 # 입력변수 / 타겟변수 분리 
@@ -204,7 +186,6 @@ Y = trainset['rental'].values
 trainset.drop(['rental'] , axis = 1 , inplace = True )
 
 
-# In[16]:
 
 
 # 학습에 사용한 변수 확인
@@ -214,7 +195,6 @@ print(trainset.columns)
 # ## LGBM
 # - 일반적으로, 9000개 미만의 데이터에는 사용하는 것을 권장하지 않으나 Ensemble을 통한 성능 향상을 위해 사용
 
-# In[17]:
 
 
 def lgb_optimization(trial):
@@ -256,8 +236,6 @@ def lgb_optimization(trial):
     return np.mean(score)
 
 
-# In[18]:
-
 
 sampler = TPESampler(seed=42)
 optim = optuna.create_study(
@@ -272,15 +250,12 @@ print("Best NMAE:", optim.best_value)
 # - optuna를 통해 얻은 최적 파라미터를 적용하여 LGBM 학습
 # - 학습된 LGBM을 통해 얻어진 예측값에는 연도별 상승분인 1.3을 곱해줌
 
-# In[19]:
 
 
 lgb_params = {'boosting_type': 'dart', 'learning_rate': 0.9305668587147711, 'n_estimators': 430, 'max_depth': 3, 'num_leaves': 50,
               'reg_alpha': 0.7143708454159591, 'reg_lambda': 0.2126572020925504, 'subsample': 0.6422263687599375, 'subsample_freq': 26,
               'colsample_bytree': 0.30438918101220414,'min_child_samples': 24, 'max_bin': 55}
 
-
-# In[20]:
 
 
 model = LGBMRegressor(**lgb_params, random_state=0)
@@ -289,8 +264,6 @@ lgb_pred = 1.3 * model.predict(testset) # 연도별 상승분 고려
 
 
 # ## Catboost
-
-# In[21]:
 
 
 def cb_optimization(trial):
@@ -329,7 +302,6 @@ def cb_optimization(trial):
     return np.mean(score)
 
 
-# In[22]:
 
 
 sampler = TPESampler(seed=42)
@@ -345,7 +317,6 @@ print("Best NMAE:", optim.best_value)
 # - optuna를 통해 얻은 최적 파라미터를 적용하여 Catboost 학습
 # - 학습된 Catboost를 통해 얻어진 예측값에는 연도별 상승분인 1.3을 곱해줌
 
-# In[23]:
 
 
 cb_params =  {'iterations': 211, 'learning_rate': 0.24350940859355197, 'depth': 4, 'min_data_in_leaf': 2, 
@@ -354,7 +325,6 @@ cb_params =  {'iterations': 211, 'learning_rate': 0.24350940859355197, 'depth': 
               'colsample_bylevel': 0.7255622371880818}
 
 
-# In[24]:
 
 
 model = CatBoostRegressor(**cb_params, random_state=0, verbose=0)
@@ -367,7 +337,6 @@ cb_pred = 1.3 * model.predict(testset) # 연도별 상승분 고려
 # - 이외에도 XGB, NN, ExtraTree, Randomforest 등 다양한 모델을 최적화
 #     - 최종적으로 사용한 LGBM과 Catboost에 비해 CV 성능이 현저히 낮아 2가지 모델만 에버리징
 
-# In[25]:
 
 
 ensemble_pred = (lgb_pred + cb_pred) / 2
@@ -376,7 +345,6 @@ ensemble_pred = (lgb_pred + cb_pred) / 2
 # # 후처리
 # - "학습에 사용하지 않은 변수"인 "강수량"을 활용하여 전체 Output에 "일괄적인 후처리"가 가능할 것이라고 판단
 
-# In[26]:
 
 
 # 데이터셋 다시 불러오기
@@ -391,7 +359,6 @@ test_data['precipitation'] = test_data["precipitation"].replace(np.nan, 0)
 # - 비가 오면 확실히 대여량이 크게 감소함
 # - 연도에 따라 이용객이 증가했더라도, 비가 오는날은 모두가 동일하게 타지 않을거라고 생각한뒤 이를 확인
 
-# In[27]:
 
 
 plt.scatter(train_data['precipitation'], train_data['rental'])
@@ -406,7 +373,7 @@ plt.axvline(x=15, color='k')
 #     - 지속시간이 짧으면 수요량에도 크게 영향이 없다고 추측할 수 있음
 #     - 따라서 확실한 15 이상 날을 대상으로 후처리
 
-# In[28]:
+
 
 
 print(train_data.loc[train_data['precipitation'] > 15, 'rental'].mean() / train_data.loc[train_data['precipitation'] <= 15, 'rental'].mean())
@@ -415,7 +382,7 @@ print(train_data.loc[train_data['precipitation'] > 3, 'rental'].mean() / train_d
 
 # - 강수량 15mm 이상의 날에는 연도별 상승분을 곱하지 않음
 
-# In[29]:
+
 
 
 test_data['rental_pred'] = np.round(ensemble_pred) # 에버리징 값을 테스트 데이터셋과 병합
@@ -424,7 +391,6 @@ test_data.loc[test_data['precipitation'] > 15, 'rental_pred'] = test_data.loc[te
 
 # # 제출 파일 생성
 
-# In[30]:
 
 
 sample_submission = pd.read_csv('./dataset/sample_submission.csv')
@@ -432,7 +398,7 @@ sample_submission["rental"] = test_data['rental_pred']
 sample_submission
 
 
-# In[31]:
+
 
 
 sample_submission.to_csv('[이전끝]final_submission.csv', index=False)
