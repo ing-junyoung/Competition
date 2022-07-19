@@ -1,3 +1,5 @@
+# Public 5위 , Private 1위 / 이전끝 / Ensemble(LightGBM+CatBoost) <br>
+
 
 ## 데이터셋 구축 및 전처리
 
@@ -85,17 +87,3 @@ CV를 통해 얻어진 파라미터를 활용하여 모델을 전체 학습 데�
 ● Xgboost는 단일 model로 사용할 때는 성능이 나쁘진 않았으나 Ensemble 과정에서는 오히려 좋지 않았기에 제외 <br>
 ● 개인적인 판단이지만 Hyper parameter 조절 대상 개수가 적은 sklearn에서 제공하는 ML Model은 성능이 크게 좋지 않았음 <br>
 ● 워낙, 깔끔하게 정제된 정형 Dataset이기에 Model Selection 보다는 Optimization에 집중 <br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
