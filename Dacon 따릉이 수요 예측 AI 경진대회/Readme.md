@@ -23,12 +23,21 @@
 ● date를 year, month, day, dayofyear로 분할 <br>
 ● *dayofyear와 day는 성능에 악영향을 끼쳐 최종적으로 제외* <br>
 
+<br>
+<br>
 
 ## Feature Selection & Drop 
 
 ● 논리적으로 필요가 없다고 생각한 변수를 제거하며 모델 입력 변수를 탐색 <br>
 ● 예로, 시간 변수가 있으므로 date 변수 제거 <br>
 ● 강수 지속 시간과 "강수량X강수지속시간"이 있기 때문에 precipitation(강수량) 변수 제거 <br>
-● Multiple Linear Regression에서의 Backward Elimination(후진제거법)과 같은 맥락으로 성능을 살펴보며 순차적으로  <br>
+● Multiple Linear Regression에서의 Backward Elimination(후진제거법)과 같은 맥락으로 성능을 살펴보며 순차적으로 제거<br>
+● 강수 관련 변수들이 습도를 대신한다 생각하기 때문에 humidity 제거<br>
+● wind_mean이나 wind_max는 체감 온도나 강수 시간(태풍의 경우), 최저 기온(추위)등으로 설명할 수 있다고 생각하기 때문에 제외<br>
+
+<br>
+<br>
+
+
 
 
