@@ -1,1 +1,3 @@
 # Requirements
+
+conda install 
