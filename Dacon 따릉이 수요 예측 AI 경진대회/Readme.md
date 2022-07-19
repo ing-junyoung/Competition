@@ -21,7 +21,7 @@
 특히 평일 출/퇴근 시간에 따릉이 수요량이 많다고는 하지만 주말에 타는 사람이 그만큼 많기에 이러한 차이가 상쇄되었다고 판단 <br>
 ● **discomfort** : 불쾌지수, hi, pi와 마찬가지로 기온 관련 변수 추가 <br>
 ● date를 year, month, day, dayofyear로 분할 <br>
-● *dayofyear와 day는 성능에 악영향을 끼쳐 최종적으로 제외 <br>
+● *dayofyear와 day는 성능에 악영향을 끼쳐 최종적으로 제외* <br>
 
 
 ## Feature Selection & Drop 
