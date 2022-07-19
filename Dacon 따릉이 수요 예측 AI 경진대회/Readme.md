@@ -21,13 +21,13 @@
 특히 평일 출/퇴근 시간에 따릉이 수요량이 많다고는 하지만 주말에 타는 사람이 그만큼 많기에 이러한 차이가 상쇄되었다고 판단 <br>
 ● **discomfort** : 불쾌지수, hi, pi와 마찬가지로 기온 관련 변수 추가 <br>
 ● date를 year, month, day, dayofyear로 분할 <br>
-● dayofyear와 day는 성능에 악영향을 끼쳐 최종적으로 제외 <br>
+● *dayofyear와 day는 성능에 악영향을 끼쳐 최종적으로 제외 <br>
 
 
 ## Feature Selection & Drop 
 
-● 논리적으로 필요가 없다고 생각한 변수 제거 <br>
-● 시간 변수가 있으므로 date 변수 제거 <br>
+● 논리적으로 필요가 없다고 생각한 변수를 제거하며 모델 입력 변수를 탐색 <br>
+● 예로, 시간 변수가 있으므로 date 변수 제거 <br>
 ● 강수 지속 시간과 "강수량X강수지속시간"이 있기 때문에 precipitation(강수량) 변수 제거 <br>
 ● Multiple Linear Regression에서의 Backward Elimination(후진제거법)과 같은 맥락으로 성능을 살펴보며 순차적으로  <br>
 
