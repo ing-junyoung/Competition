@@ -1,4 +1,6 @@
 # Requirements
 
-```conda env create -f environment.yml   
-conda activate Darreung ```
+```
+conda env create -f environment.yml   
+conda activate Darreung 
+```
