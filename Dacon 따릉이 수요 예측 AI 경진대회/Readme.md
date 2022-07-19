@@ -1,7 +1,7 @@
 # Requirements
 
 ```
-# 데이터셋 구축 및 전처리
+//bold 데이터셋 구축 및 전처리
 ● 외부 데이터는 모두 기상개방포털을 활용(https://data.kma.go.kr/cmmn/main.do)
 일부 변수 계산법 및 일부 아이디어는 기존 따릉이 수요예측 대회 1등인 다람이도토리님의 코드를 참고(https://dacon.io/competitions/official/235837/codeshare/3724?page=1&dtype=recent)
 cl : 운량, 흐림의 정도를 표현할 수 있을 것이라는 판단에 추가
