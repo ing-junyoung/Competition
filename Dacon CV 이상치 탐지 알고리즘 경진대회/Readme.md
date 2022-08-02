@@ -1,3 +1,3 @@
 
 
-## 다양한 Augmentation 기법을 이용해 anomaly detection  
+### 다양한 Augmentation 기법을 이용해 Anomaly detection  
